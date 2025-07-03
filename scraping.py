@@ -1,8 +1,10 @@
 import requests
 import base64
-import json
+# import json
+import pandas as pd
+# import pyarrow
+# import pyarrow.parquet as pq
 
-ibov_api = "https://sistemaswebb3-listados.b3.com.br/indexProxy/indexCall/GetPortfolioDay/{filtro}"
 
 filtro = {
     "language": "pt-br",
@@ -12,9 +14,18 @@ filtro = {
     "segment": "1",
 }
 
+
+ibov_api = "https://sistemaswebb3-listados.b3.com.br/indexProxy/indexCall/GetPortfolioDay/{filtro}"
+
+
 filtro_encoded = base64.b64encode(str(filtro).encode()).decode()
 
 response = requests.get(ibov_api.format(filtro=filtro_encoded))
 
-with open("ibov.json", "w") as file:
-    json.dump(response.json(), file, indent=4, ensure_ascii=False)
+data = response.json()
+
+df = pd.DataFrame(data.get("results", []))
+
+df.to_parquet("ibov.parquet", index=False)
+
+

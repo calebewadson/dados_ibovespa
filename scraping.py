@@ -1,9 +1,7 @@
 import requests
 import base64
-# import json
 import pandas as pd
-# import pyarrow
-# import pyarrow.parquet as pq
+import json
 
 
 filtro = {

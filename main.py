@@ -28,7 +28,6 @@ def run_daily_process():
         return
 
     data_obj = datetime.now()
-    data_str = data_obj.strftime("%Y%m%d")
 
     partition_path = (
         f"ano={data_obj.year}/mes={data_obj.month:02d}/dia={data_obj.day:02d}"

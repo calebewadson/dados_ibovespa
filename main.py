@@ -38,6 +38,7 @@ def run_daily_process():
     s3_object_key = LOCAL_FILE_NAME_FORMAT.format(
         date=data_str, prefix=LOCAL_FILE_PREFIX
     )
+    s3_object_key = f'raw/{s3_object_key}'
 
     print(
         f'Fazendo upload de "{local_file_path}" para s3://{S3_BUCKET_NAME}/{s3_object_key}...'

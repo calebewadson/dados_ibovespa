@@ -24,7 +24,11 @@ def get_ibov_portfolio(filters=None):
         response = requests.get(ibov_api_url)
         response.raise_for_status()
         data_json = response.json()
-        return pd.DataFrame(data_json.get('results', []))
+        df = pd.DataFrame(data_json.get('results', []))
+        current_date = datetime.now().strftime('%Y-%m-%d')
+        df['data_pregao'] = current_date
+        return df
+    
     except requests.exceptions.RequestException as e:
         print(f'Erro ao buscar dados da B3: {e}')
         return pd.DataFrame()
@@ -52,4 +56,4 @@ def save_dataframe_as_parquet_daily(df):
         return file_path
     except Exception as e:
         print(f'Erro ao salvar arquivo Parquet: {e}')
-        return None
+        return pd.DataFrame()

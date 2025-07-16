@@ -2,7 +2,7 @@ import requests
 import json
 import base64
 import pandas as pd
-from datetime import datetime
+from datetime import datetime, timedelta
 import os
 from src.config import (
     B3_IBOV_API_BASE_URL,
@@ -25,7 +25,12 @@ def get_ibov_portfolio(filters=None):
         response.raise_for_status()
         data_json = response.json()
         df = pd.DataFrame(data_json.get("results", []))
-        current_date = datetime.now().strftime("%Y-%m-%d")
+        if "theoricalQty" in df.columns:
+            df["theoricalQty"] = df["theoricalQty"].astype(str).str.replace(".", "", regex=False)
+        if "part" in df.columns:
+            df["part"] = df["part"].astype(str).str.replace(",", ".", regex=False)
+        current_date = datetime.now() - timedelta(days=1)
+        current_date = current_date.strftime("%Y-%m-%d")
         df["data_pregao"] = current_date
         return df
 
